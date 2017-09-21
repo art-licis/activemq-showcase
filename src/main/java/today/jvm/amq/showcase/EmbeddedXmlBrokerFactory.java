@@ -12,6 +12,14 @@ import java.io.File;
 import java.util.Hashtable;
 
 public class EmbeddedXmlBrokerFactory {
+
+	/**
+	 * Creates {@link ActiveMQConnectionFactory} using XBean provided configuration.
+	 *
+	 * @param xbeanUri URI of ActiveMQ XML configuration (could be file or classpath resource)
+	 *
+	 * @return instance of {@link ActiveMQConnectionFactory}
+	 */
 	public static ActiveMQConnectionFactory createConnectionFactory(String xbeanUri) throws NamingException, JMSException {
 		Hashtable<String, String> properties = new Hashtable<String, String>();
 		properties.put("java.naming.factory.initial", "org.apache.activemq.jndi.ActiveMQInitialContextFactory");

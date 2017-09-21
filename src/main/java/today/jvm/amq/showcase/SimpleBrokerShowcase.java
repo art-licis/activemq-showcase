@@ -4,8 +4,12 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
 import javax.naming.NamingException;
-import java.io.File;
 
+/**
+ * Simple broker showcase: use minimal configuration (see activemq-simple.xml) to send/receive message.
+ *
+ * @author Arturs Licis
+ */
 public class SimpleBrokerShowcase {
 	public static void main(String[] args) throws JMSException, NamingException, InterruptedException {
 		ActiveMQConnectionFactory connectionFactory = EmbeddedXmlBrokerFactory.createConnectionFactory("today/jvm/amq/showcase/activemq-simple.xml");
