@@ -1,6 +1,7 @@
 package today.jvm.amq.showcase;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQMessage;
 
 import javax.jms.*;
 import javax.naming.NamingException;
@@ -12,9 +13,6 @@ import javax.naming.NamingException;
  * In this example, messages from queues 'amq.simple.queue.>' are forwarded to
  * 'amq.simple.queue.notifications'. In order for original queues to remain
  * usable, 'forwardOnly' is set to false.
- *
- * For each queue, there's a mirrored destination (topic) with the same name but prefix '.mirror'
- * (as defined in XML configuration).
  *
  * @author Arturs Licis
  */
@@ -30,18 +28,10 @@ public class VirtualDestinationsShowcase {
 		MessageProducer producer2 = producerSession.createProducer(producerSession.createQueue("amq.simple.queue.2"));
 
 		Session consumerSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		MessageConsumer consumer = consumerSession.createConsumer(producerSession.createQueue("amq.simple.queue.>"));
+		MessageConsumer consumer = consumerSession.createConsumer(producerSession.createTopic("amq.simple.queue.notifications"));
 		consumer.setMessageListener(new MessageListener() {
 			public void onMessage(Message message) {
-				System.out.println("Received a message: " + message);
-			}
-		});
-
-		Session mirrorConsumerSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		MessageConsumer mirrorConsumer = mirrorConsumerSession.createConsumer(producerSession.createTopic("amq.simple.queue.notifications"));
-		mirrorConsumer.setMessageListener(new MessageListener() {
-			public void onMessage(Message message) {
-				System.out.println("Received a message (notifications): " + message);
+				System.out.println("Received a message originating from " + ((ActiveMQMessage) message).getOriginalDestination() + ":\n\t" + message);
 			}
 		});
 
