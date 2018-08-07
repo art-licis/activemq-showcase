@@ -25,19 +25,11 @@ public class MirroredQueuesShowcase {
 
 		Session consumerSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		MessageConsumer consumer = consumerSession.createConsumer(producerSession.createQueue("amq.simple.queue"));
-		consumer.setMessageListener(new MessageListener() {
-			public void onMessage(Message message) {
-				System.out.println("Received a message: " + message);
-			}
-		});
+		consumer.setMessageListener(message -> System.out.println("Received a message: " + message));
 
 		Session mirrorConsumerSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		MessageConsumer mirrorConsumer = mirrorConsumerSession.createConsumer(producerSession.createTopic("amq.simple.queue.mirror"));
-		mirrorConsumer.setMessageListener(new MessageListener() {
-			public void onMessage(Message message) {
-				System.out.println("Received a message (mirror): " + message);
-			}
-		});
+		mirrorConsumer.setMessageListener(message -> System.out.println("Received a message (mirror): " + message));
 
 		producer.send(producerSession.createTextMessage("This is a first message's payload"));
 

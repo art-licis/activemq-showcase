@@ -31,19 +31,11 @@ public class MirroredQueuesCompositeShowcase {
 
 		Session consumerSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		MessageConsumer consumer = consumerSession.createConsumer(producerSession.createQueue("amq.simple.queue.>"));
-		consumer.setMessageListener(new MessageListener() {
-			public void onMessage(Message message) {
-				System.out.println("Received a message: " + message);
-			}
-		});
+		consumer.setMessageListener(message -> System.out.println("Received a message: " + message));
 
 		Session mirrorConsumerSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		MessageConsumer mirrorConsumer = mirrorConsumerSession.createConsumer(producerSession.createTopic("amq.simple.queue.wiretap.notifications"));
-		mirrorConsumer.setMessageListener(new MessageListener() {
-			public void onMessage(Message message) {
-				System.out.println("(wiretap) Received a message: " + message);
-			}
-		});
+		mirrorConsumer.setMessageListener(message -> System.out.println("(wiretap) Received a message: " + message));
 
 		producerOne.send(producerSession.createTextMessage("[ONE] This is a first message's payload"));
 		producerTwo.send(producerSession.createTextMessage("[TWO] This is a first message's payload"));

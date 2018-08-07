@@ -29,12 +29,7 @@ public class VirtualDestinationsShowcase {
 
 		Session consumerSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		MessageConsumer consumer = consumerSession.createConsumer(producerSession.createTopic("amq.simple.queue.notifications"));
-		consumer.setMessageListener(new MessageListener() {
-			public void onMessage(Message message) {
-				System.out.println("Received a message originating from " + ((ActiveMQMessage) message).getOriginalDestination() + ":\n\t" + message);
-			}
-		});
-
+		consumer.setMessageListener(message -> System.out.println("Received a message originating from " + ((ActiveMQMessage) message).getOriginalDestination() + ":\n\t" + message));
 		producer1.send(producerSession.createTextMessage("[P1] This is a first message's payload"));
 		producer2.send(producerSession.createTextMessage("[P2] This is a first message's payload"));
 

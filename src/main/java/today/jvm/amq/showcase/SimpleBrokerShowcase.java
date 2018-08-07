@@ -22,11 +22,7 @@ public class SimpleBrokerShowcase {
 
 		Session consumerSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		MessageConsumer consumer = producerSession.createConsumer(producerSession.createTopic("amq.simple.topic"));
-		consumer.setMessageListener(new MessageListener() {
-			public void onMessage(Message message) {
-				System.out.println("Received a message: " + message);
-			}
-		});
+		consumer.setMessageListener(message -> System.out.println("Received a message: " + message));
 
 		producer.send(producerSession.createTextMessage("This is a first message's payload"));
 
